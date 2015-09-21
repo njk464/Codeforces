@@ -5,6 +5,23 @@
 #include <iostream>
 #include <limits>
 using namespace std;
+vector< pair<long long int, long long int> > next(long long int row, long long int front, long long int back) {
+    vector< pair<long long int, long long int> > pairs;
+    long long int curf = front;
+    long long int curb = front;
+    while (curb != back){
+        if (fences[curb] > row) {
+            pairs.push_back(make_pair(curf, curb));
+            while (fences[curb] > row && curb != back) {
+                curb++;
+            }
+            curf = curb;
+            curb--;
+        }
+        curb++;
+    }
+    return pairs;
+}
 int main(void) 
 {
 	vector<long long int> fences;
@@ -23,6 +40,28 @@ int main(void)
         cout << min(fences.size(), min);
         return 0;
     }
-    
+    if (min > fences.size()) {
+        cout << fences.size();
+        return 0;
+    }
+    if (max < fences.size()) {
+        cout << max
+    }
+    vector<long long int> strokes;
+    for (int i = 0; i < min; i++) {
+        strokes.push_back(i+1);
+    }
+    int i = min;
+    int front = 0;
+    int back = fences.size() - 1;
+    while (strokes.size() != max) {
+        
+    }
+
 
 }
+**      **
+****  ****
+****  ****
+**********
+**********
