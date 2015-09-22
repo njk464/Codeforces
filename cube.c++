@@ -11,6 +11,9 @@
 using namespace std;
 long long int grid[8][3];
 long long int temp[8][3];
+long long int x[] = {0,0,1,1,2,2};
+long long int y[] = {1,2,0,2,1,0};
+long long int z[] = {2,1,2,0,0,1};
 long long int square(long long int a, long long int b) {
 	return (a-b)*(a-b);
 }
@@ -25,65 +28,46 @@ void print_cube() {
 	}
 }
 void is_cube() {
-	vector<long long int> lengths;
+	map<long long int, int> mapping;
 	for (long long int i = 0; i < 8; i++)
 	{
 		for (long long int k = i+1; k < 8; k++) {
-			lengths.push_back(distance(i, k));
+			long long int d = distance(i,k);
+			if (d == 0)
+				return;
+			mapping[d]++;
+			if (mapping.size() > 3 || mapping[d] > 12)
+				return;
 		}
 	}
-	// cout << lengths.size() <<"\n";
-	if (lengths.size() != 28)
+	if (mapping.size() != 3)
 		return;
-	sort (lengths.begin(), lengths.end());
-	// for (long long int i = 0; i < 28; i++) {
-	// 	cout << lengths[i] << " ";
-	// }
-	// cout << "\n";
-	long long int min = lengths[0];
-	for (long long int i = 1; i < 12; i++)
-	{
-		if (lengths[i] != min)
-			return;
-	}
-	if (lengths[12] == min)
+	map<long long int, int>::iterator it = mapping.begin();
+	if(it->second != 12)
 		return;
-	min = lengths[12];
-	for (long long int i = 12; i < 24; i++)
-	{
-		if (lengths[i] != min)
-			return;
-	}
-	if (lengths[24] == min)
+	it++;
+	if(it->second != 12)
 		return;
-	min = lengths[24];
-	for (long long int i = 24; i < 28; i++)
-	{
-		if (lengths[i] != min)
-			return;
-	}
-
+	it++;
+	if(it->second != 4)
+		return;
 	cout << "YES\n";
 	print_cube();
 	exit(0);
 	return;
 
 }
-void recur_try2(int where, long long int coor, long long int x, long long int y, long long int z) {
+void recur_try2(long long int coor) {
 	if (coor >= 8)
 		return;
-	temp[coor][0] = grid[coor][x];
-	temp[coor][1] = grid[coor][y];
-	temp[coor][2] = grid[coor][z];
-	is_cube();
-	recur_try2(0, ++coor, 0, 1, 2);
-	switch (where){
-		case 0: recur_try2(1, coor, 0, 2, 1);
-		case 1: recur_try2(2, coor, 1, 0, 2);
-		case 2: recur_try2(3, coor, 1, 2, 0);
-		case 3: recur_try2(4, coor, 2, 1, 0);
-		case 4: recur_try2(5, coor, 2, 0, 1);
-		case 5: return;
+	for (int i=0; i < 6; i++) {
+		temp[coor][0] = grid[coor][x[i]];
+		temp[coor][1] = grid[coor][y[i]];
+		temp[coor][2] = grid[coor][z[i]];
+		// print_cube();
+		// cout <<"\n";
+		is_cube();
+		recur_try2(coor+1);
 	}
 
 }
@@ -99,6 +83,6 @@ int main() {
 	// cout << (-337 +193088)*(-337 +193088) +(577079 +683216)*(577079 +683216) + (887691+342950)*(887691+342950)<<"\n";
 	// cout << "\n" << distance(0,1) << "\n";
 	is_cube();
-	recur_try2(0, 0, 0, 1, 2);
+	recur_try2(0);
 	cout << "NO";
 }
